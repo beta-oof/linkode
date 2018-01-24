@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 #Made by beta-oof on github
 #https://github.com/beta-oof/linkode
 """
@@ -25,19 +27,22 @@ SOFTWARE.
 """
 
 import base64
-import webbrowser
-from flask import Flask
-
+from flask import Flask, render_template
 app = Flask(__name__)
-
 
 @app.route('/') #index page (landing)
 def index():
-    return 'Usage - 127.0.0.1:5000/url/<URL Goes Here>'
+	return render_template("main.html")
 
-@app.route('/<url>') #Encoding API
+@app.route('/<path:url>') #Encoding API
 def url(url):
 	encurl = base64.b64encode(url)
-	return encurl
+	return 'data:url;base64, '+encurl
+
+@app.route('/pic/<path:purl>')
+def purl(purl):
+	encpurl = base64.b64encode(purl)
+	return '(Change your prefix accordingly)data:image/png;base64, '+encpurl	
+	
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run(debug=True, host='0.0.0.0', port=8080)
